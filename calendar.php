@@ -2294,6 +2294,7 @@ class ICalendarOutput extends OutputFormat {
 		}
 		foreach($data->events as $item){
 			fwrite($handle,"BEGIN:VEVENT\r\n");
+      fwrite($handle, $this->wrap("UID:".$this->escape_text($item->uid))."\r\n");
 			fwrite($handle,"DTSTART:".gmdate("Ymd\THis\Z",$item->{"start-time"})."\r\n");
 			fwrite($handle,"DTEND:".gmdate("Ymd\THis\Z",$item->{"end-time"})."\r\n");
 			fwrite($handle,$this->wrap("SUMMARY:".$this->escape_text($item->name))."\r\n");
@@ -2303,6 +2304,9 @@ class ICalendarOutput extends OutputFormat {
 			if(isset($item->url)){
 				fwrite($handle,$this->wrap("URL:".$this->escape_url($item->url))."\r\n");
 			}
+			if(isset($item->location)){
+        fwrite($handle,$this->wrap("LOCATION:".$this->escape_text($item->location))."\r\n");
+      }
 			fwrite($handle,"END:VEVENT\r\n");
 		}
 		fwrite($handle,"END:VCALENDAR\r\n");
